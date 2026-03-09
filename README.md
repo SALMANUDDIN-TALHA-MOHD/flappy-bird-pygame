@@ -4,8 +4,8 @@ Open Source Computing Course Project COMP 312/412 - Spring 2026
 
 ## Team Members
 - Salmanuddin Talha Mohd (Graduate Student)
-- [Amaan Khan ] (Undergraduate)
-- [Sohail Shaik ] (Undergraduate)
+- Amaan Khan  (Undergraduate)
+- Sohail Shaik  (Undergraduate)
 
 ## Description
 A Flappy Bird-style game built with Python and Pygame. This project implements core game mechanics including physics, collision detection, scoring, and menu systems.
