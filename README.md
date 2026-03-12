@@ -35,32 +35,35 @@ python3 main.py
 ```
 
 ## Project Structure
-
+```
 Flappy Bird Game/
-├── main.py              # Main game loop
-├── bird.py              # Bird mechanics
-├── pipe.py              # Pipe obstacles
-├── collision.py         # Collision detection
-├── score.py             # Scoring system
-├── menu.py              # Menu screens
+├── src/                 # Source code folder
+│   ├── main.py         # Main game loop
+│   ├── bird.py         # Bird mechanics
+│   ├── pipe.py         # Pipe obstacles
+│   ├── collision.py    # Collision detection
+│   ├── score.py        # Scoring system
+│   └── menu.py         # Menu screens
 ├── assets/              # Game assets
 │   ├── images/          # Sprites and graphics
+│   │   ├── bird/       # Bird sprites
+│   │   ├── pipes/      # Pipe graphics
+│   │   └── backgrounds/ # Background images
 │   └── sounds/          # Sound effects
-├── requirements.txt     # Python dependencies
-└── README.md            # This file
-
-
-## Development Status
-- [x] Project setup
-- [x] Basic game window
-- [ ] Bird sprite and movement
-- [ ] Pipe obstacles
-- [ ] Collision detection
-- [ ] Scoring system
-- [ ] Menu screens
+├── run_game.py         # Game launcher (run this!)
+├── requirements.txt    # Python dependencies
+└── README.md          # This file
+```
 
 ## How to Run
 ```bash
+# From project root directory
+python3 run_game.py
+```
+
+Or run directly from src:
+```bash
+cd src
 python3 main.py
 ```
 
