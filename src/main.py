@@ -27,12 +27,20 @@ def main():
     
     while running:
         # Event handling
+    
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        
+            # Jump when spacebar pressed
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    bird.jump()
+                    
         # Fill background
         screen.fill(SKY_BLUE)
+        
+        # Update bird physics
+        bird.update(SCREEN_HEIGHT)
         
         # Draw bird
         bird.draw(screen)
