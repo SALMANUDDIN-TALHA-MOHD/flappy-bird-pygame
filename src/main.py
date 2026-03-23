@@ -1,5 +1,6 @@
 import pygame
 import sys
+from bird import Bird
 
 # Initialize Pygame
 pygame.init()
@@ -19,6 +20,9 @@ FPS = 60
 
 def main():
     """Main game loop"""
+    # Create bird object
+    bird = Bird(100, SCREEN_HEIGHT // 2)
+    
     running = True
     
     while running:
@@ -29,6 +33,9 @@ def main():
         
         # Fill background
         screen.fill(SKY_BLUE)
+        
+        # Draw bird
+        bird.draw(screen)
         
         # Update display
         pygame.display.flip()
