@@ -66,6 +66,18 @@ Or run directly from src:
 cd src
 python3 main.py
 ```
+## Development Status
+- [x] Project setup and repository creation
+- [x] Basic game window
+- [x] Bird sprite with 8-frame animation ✅
+- [x] Gravity physics ✅
+- [x] Jump mechanics ✅
+- [x] Screen boundaries ✅
+- [x] Sprite rotation ✅
+- [ ] Pipe obstacles (Report 5)
+- [ ] Collision detection
+- [ ] Scoring system
+- [ ] Menu screens
 
 ## License
 MIT License
