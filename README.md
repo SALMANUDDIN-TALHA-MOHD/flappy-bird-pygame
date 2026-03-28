@@ -74,7 +74,7 @@ python3 main.py
 - [x] Jump mechanics ✅
 - [x] Screen boundaries ✅
 - [x] Sprite rotation ✅
-- [ ] Pipe obstacles (Report 5)
+- [x] Pipe obstacles ✅
 - [ ] Collision detection
 - [ ] Scoring system
 - [ ] Menu screens
