@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Pipe:
     """
@@ -54,3 +55,11 @@ class Pipe:
     def is_off_screen(self):
         """Check if pipe has moved off the left side of screen"""
         return self.x + self.width < 0
+    
+    @staticmethod
+    def generate_random_gap_y(screen_height):
+        """Generate random gap position with safe boundaries"""
+        # Keep gap away from top and bottom (100px margins)
+        min_gap_y = 150
+        max_gap_y = screen_height - 150
+        return random.randint(min_gap_y, max_gap_y)
