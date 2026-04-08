@@ -20,7 +20,7 @@ SKY_BLUE = (135, 206, 235)
 
 # Game clock for FPS control
 clock = pygame.time.Clock()
-FPS = 60
+FPS = 70
 
 def main():
     """Main game loop"""
