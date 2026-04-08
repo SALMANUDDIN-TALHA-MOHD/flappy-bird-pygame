@@ -14,7 +14,7 @@ class Bird:
         # Physics constants
         self.gravity = 0.5
         self.max_fall_speed = 10
-        self.jump_strength = -10
+        self.jump_strength = -9.5
         
         # Bird size - MUST BE DEFINED BEFORE load_sprites()
         self.width = 50
