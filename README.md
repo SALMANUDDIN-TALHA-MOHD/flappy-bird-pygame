@@ -67,8 +67,8 @@ cd src
 python3 main.py
 ```
 ## Development Status
-- [x] Project setup and repository creation
-- [x] Basic game window
+- [x] Project setup and repository creation ✅
+- [x] Basic game window ✅
 - [x] Bird sprite with 8-frame animation ✅
 - [x] Gravity physics ✅
 - [x] Jump mechanics ✅
@@ -76,10 +76,9 @@ python3 main.py
 - [x] Sprite rotation ✅
 - [x] Pipe obstacles ✅
 - [x] Collision detection✅
-- [x] Score counting up as you pass pipes✅
-- [x] Game over screen with final score✅
-- [x] Restart functionality (press R)✅
-- [x] Scoring system
+- [x] Score counting up as you pass pipes ✅
+- [x] Game over screen with final score ✅
+- [x] Restart functionality (press R) ✅
 - [ ] Menu screens
 
 ## License
