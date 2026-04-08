@@ -52,8 +52,16 @@ def main():
                 running = False
             # Jump when spacebar pressed
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and not game_over:
                     bird.jump()
+                # Restart game on 'R' key
+                if event.key == pygame.K_r and game_over:
+                    # Reset everything
+                    bird = Bird(100, SCREEN_HEIGHT // 2)
+                    pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    score_manager.reset()
+                    game_over = False
+                    print("Game restarted!")
         
         # Fill background
         screen.fill(SKY_BLUE)
