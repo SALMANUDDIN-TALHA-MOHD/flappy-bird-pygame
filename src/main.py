@@ -3,6 +3,7 @@ import sys
 from bird import Bird
 from pipe import PipeManager
 from collision import CollisionDetector
+from score import ScoreManager
 
 # Initialize Pygame
 pygame.init()
@@ -35,6 +36,9 @@ def main():
     # Game state
     game_over = False
     
+    # Create score manager
+    score_manager = ScoreManager()
+    
     # Debug font
     debug_font = pygame.font.Font(None, 36)
     game_over_font = pygame.font.Font(None, 64)
@@ -62,6 +66,9 @@ def main():
             # Update pipes
             pipe_manager.update()
             
+            # Update score
+            score_manager.update(bird, pipe_manager.get_pipes())
+            
             # Check for collisions
             if collision_detector.check_collision(bird, pipe_manager.get_pipes(), SCREEN_HEIGHT):
                 game_over = True
@@ -72,6 +79,9 @@ def main():
         
         # Draw bird
         bird.draw(screen)
+        
+        # Draw score
+        score_manager.draw(screen)
         
         # Draw debug info
         pipe_count = len(pipe_manager.get_pipes())
