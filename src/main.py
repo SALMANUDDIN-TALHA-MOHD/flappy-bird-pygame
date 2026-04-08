@@ -2,6 +2,7 @@ import pygame
 import sys
 from bird import Bird
 from pipe import PipeManager
+from collision import CollisionDetector
 
 # Initialize Pygame
 pygame.init()
@@ -28,8 +29,15 @@ def main():
     # Create pipe manager
     pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
     
+    # Create collision detector
+    collision_detector = CollisionDetector()
+    
+    # Game state
+    game_over = False
+    
     # Debug font
     debug_font = pygame.font.Font(None, 36)
+    game_over_font = pygame.font.Font(None, 64)
     
     running = True
     
@@ -46,11 +54,18 @@ def main():
         # Fill background
         screen.fill(SKY_BLUE)
         
-        # Update bird physics
-        bird.update(SCREEN_HEIGHT)
-        
-        # Update pipes
-        pipe_manager.update()
+       # Only update if game is not over
+        if not game_over:
+            # Update bird physics
+            bird.update(SCREEN_HEIGHT)
+            
+            # Update pipes
+            pipe_manager.update()
+            
+            # Check for collisions
+            if collision_detector.check_collision(bird, pipe_manager.get_pipes(), SCREEN_HEIGHT):
+                game_over = True
+                print("Game Over!")
         
         # Draw pipes
         pipe_manager.draw(screen)
@@ -62,6 +77,12 @@ def main():
         pipe_count = len(pipe_manager.get_pipes())
         debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (255, 255, 255))
         screen.blit(debug_text, (10, 10))
+        
+        # Draw game over message
+        if game_over:
+            game_over_text = game_over_font.render('GAME OVER', True, (255, 0, 0))
+            game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+            screen.blit(game_over_text, game_over_rect)
         
         # Update display
         pygame.display.flip()
