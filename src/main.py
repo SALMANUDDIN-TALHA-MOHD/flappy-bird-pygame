@@ -88,11 +88,28 @@ def main():
         debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (255, 255, 255))
         screen.blit(debug_text, (10, 10))
         
-        # Draw game over message
+        # Draw game over screen
         if game_over:
+            # Semi-transparent overlay
+            overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+            overlay.set_alpha(128)
+            overlay.fill((0, 0, 0))
+            screen.blit(overlay, (0, 0))
+            
+            # Game over text
             game_over_text = game_over_font.render('GAME OVER', True, (255, 0, 0))
-            game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+            game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
             screen.blit(game_over_text, game_over_rect)
+            
+            # Final score
+            final_score_text = debug_font.render(f'Score: {score_manager.get_score()}', True, (255, 255, 255))
+            final_score_rect = final_score_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
+            screen.blit(final_score_text, final_score_rect)
+            
+            # Restart instruction
+            restart_text = debug_font.render('Press R to Restart', True, (255, 255, 255))
+            restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 80))
+            screen.blit(restart_text, restart_rect)
         
         # Update display
         pygame.display.flip()
