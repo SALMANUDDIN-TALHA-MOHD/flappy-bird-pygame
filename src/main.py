@@ -6,6 +6,7 @@ from collision import CollisionDetector
 from score import ScoreManager, HighScoreManager
 from menu import MenuManager, GameState
 from sound import SoundManager
+from ground import Ground
 
 # Initialize Pygame
 pygame.init()
@@ -34,6 +35,9 @@ def main():
     high_score_manager = HighScoreManager()
     menu_manager = MenuManager(SCREEN_WIDTH, SCREEN_HEIGHT)
     sound_manager = SoundManager()
+    
+    # Add this line:
+    ground = Ground(SCREEN_WIDTH, SCREEN_HEIGHT)
     
     # Debug font
     debug_font = pygame.font.Font(None, 36)
@@ -84,6 +88,9 @@ def main():
             # Update pipes
             pipe_manager.update()
             
+            # Add this line:
+            ground.update()
+            
             # Update score
             old_score = score_manager.get_score()
             score_manager.update(bird, pipe_manager.get_pipes())
@@ -105,6 +112,7 @@ def main():
         
         # Draw game elements
         pipe_manager.draw(screen)
+        ground.draw(screen)
         bird.draw(screen)
         
         # Draw score (only when playing)
