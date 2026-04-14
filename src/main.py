@@ -3,7 +3,9 @@ import sys
 from bird import Bird
 from pipe import PipeManager
 from collision import CollisionDetector
-from score import ScoreManager
+from score import ScoreManager, HighScoreManager
+from menu import MenuManager, GameState
+from sound import SoundManager
 
 # Initialize Pygame
 pygame.init()
@@ -20,28 +22,21 @@ SKY_BLUE = (135, 206, 235)
 
 # Game clock for FPS control
 clock = pygame.time.Clock()
-FPS = 70
+FPS = 60
 
 def main():
     """Main game loop"""
-    # Create bird object
+    # Create game objects
     bird = Bird(100, SCREEN_HEIGHT // 2)
-    
-    # Create pipe manager
     pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
-    
-    # Create collision detector
     collision_detector = CollisionDetector()
-    
-    # Game state
-    game_over = False
-    
-    # Create score manager
     score_manager = ScoreManager()
+    high_score_manager = HighScoreManager()
+    menu_manager = MenuManager(SCREEN_WIDTH, SCREEN_HEIGHT)
+    sound_manager = SoundManager()
     
     # Debug font
     debug_font = pygame.font.Font(None, 36)
-    game_over_font = pygame.font.Font(None, 64)
     
     running = True
     
@@ -50,24 +45,39 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            # Jump when spacebar pressed
+                
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and not game_over:
-                    bird.jump()
-                # Restart game on 'R' key
-                if event.key == pygame.K_r and game_over:
-                    # Reset everything
-                    bird = Bird(100, SCREEN_HEIGHT // 2)
-                    pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
-                    score_manager.reset()
-                    game_over = False
-                    print("Game restarted!")
+                current_state = menu_manager.get_state()
+                
+                # Start screen
+                if current_state == GameState.START:
+                    if event.key == pygame.K_SPACE:
+                        menu_manager.set_state(GameState.PLAYING)
+                        # Reset game
+                        bird = Bird(100, SCREEN_HEIGHT // 2)
+                        pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
+                        score_manager.reset()
+                
+                # Playing state
+                elif current_state == GameState.PLAYING:
+                    if event.key == pygame.K_SPACE:
+                        bird.jump()
+                        sound_manager.play_jump()
+                    if event.key == pygame.K_p:
+                        menu_manager.set_state(GameState.PAUSED)
+                
+                # Paused state
+                elif current_state == GameState.PAUSED:
+                    if event.key == pygame.K_p:
+                        menu_manager.set_state(GameState.PLAYING)
+                
+                # Game over state
+                elif current_state == GameState.GAME_OVER:
+                    if event.key == pygame.K_r:
+                        menu_manager.set_state(GameState.START)
         
-        # Fill background
-        screen.fill(SKY_BLUE)
-        
-       # Only update if game is not over
-        if not game_over:
+        # Update game (only when playing)
+        if menu_manager.get_state() == GameState.PLAYING:
             # Update bird physics
             bird.update(SCREEN_HEIGHT)
             
@@ -75,49 +85,46 @@ def main():
             pipe_manager.update()
             
             # Update score
+            old_score = score_manager.get_score()
             score_manager.update(bird, pipe_manager.get_pipes())
+            new_score = score_manager.get_score()
+            
+            # Play score sound if score increased
+            if new_score > old_score:
+                sound_manager.play_score()
             
             # Check for collisions
             if collision_detector.check_collision(bird, pipe_manager.get_pipes(), SCREEN_HEIGHT):
-                game_over = True
-                print("Game Over!")
+                menu_manager.set_state(GameState.GAME_OVER)
+                sound_manager.play_hit()
+                # Save high score
+                high_score_manager.save_high_score(score_manager.get_score())
         
-        # Draw pipes
+        # Draw everything
+        screen.fill(SKY_BLUE)
+        
+        # Draw game elements
         pipe_manager.draw(screen)
-        
-        # Draw bird
         bird.draw(screen)
         
-        # Draw score
-        score_manager.draw(screen)
+        # Draw score (only when playing)
+        if menu_manager.get_state() == GameState.PLAYING:
+            score_manager.draw(screen)
         
         # Draw debug info
         pipe_count = len(pipe_manager.get_pipes())
         debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (255, 255, 255))
         screen.blit(debug_text, (10, 10))
         
-        # Draw game over screen
-        if game_over:
-            # Semi-transparent overlay
-            overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-            overlay.set_alpha(128)
-            overlay.fill((0, 0, 0))
-            screen.blit(overlay, (0, 0))
-            
-            # Game over text
-            game_over_text = game_over_font.render('GAME OVER', True, (255, 0, 0))
-            game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50))
-            screen.blit(game_over_text, game_over_rect)
-            
-            # Final score
-            final_score_text = debug_font.render(f'Score: {score_manager.get_score()}', True, (255, 255, 255))
-            final_score_rect = final_score_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 20))
-            screen.blit(final_score_text, final_score_rect)
-            
-            # Restart instruction
-            restart_text = debug_font.render('Press R to Restart', True, (255, 255, 255))
-            restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 80))
-            screen.blit(restart_text, restart_rect)
+        # Draw appropriate menu overlay
+        if menu_manager.get_state() == GameState.START:
+            menu_manager.draw_start_screen(screen)
+        elif menu_manager.get_state() == GameState.PAUSED:
+            menu_manager.draw_pause_screen(screen)
+        elif menu_manager.get_state() == GameState.GAME_OVER:
+            menu_manager.draw_game_over_screen(screen, 
+                                               score_manager.get_score(),
+                                               high_score_manager.get_high_score())
         
         # Update display
         pygame.display.flip()
