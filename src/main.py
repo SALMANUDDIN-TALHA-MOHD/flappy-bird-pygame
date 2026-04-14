@@ -61,6 +61,12 @@ def main():
                         bird = Bird(100, SCREEN_HEIGHT // 2)
                         pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
                         score_manager.reset()
+                        print("Game Started!")
+                        
+                        # Reset game
+                        bird = Bird(100, SCREEN_HEIGHT // 2)
+                        pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
+                        score_manager.reset()
                 
                 # Playing state
                 elif current_state == GameState.PLAYING:
@@ -127,12 +133,11 @@ def main():
         # Draw appropriate menu overlay
         if menu_manager.get_state() == GameState.START:
             menu_manager.draw_start_screen(screen)
-        elif menu_manager.get_state() == GameState.PAUSED:
-            menu_manager.draw_pause_screen(screen)
-        elif menu_manager.get_state() == GameState.GAME_OVER:
-            menu_manager.draw_game_over_screen(screen, 
-                                               score_manager.get_score(),
-                                               high_score_manager.get_high_score())
+            # Show high score on start screen
+            high_score_text = debug_font.render(f'High Score: {high_score_manager.get_high_score()}', 
+                                               True, (255, 255, 0))
+            high_score_rect = high_score_text.get_rect(center=(SCREEN_WIDTH // 2, 420))
+            screen.blit(high_score_text, high_score_rect)
         
         # Update display
         pygame.display.flip()
