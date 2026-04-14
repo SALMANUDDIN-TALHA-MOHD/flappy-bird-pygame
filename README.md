@@ -79,7 +79,13 @@ python3 main.py
 - [x] Score counting up as you pass pipes ✅
 - [x] Game over screen with final score ✅
 - [x] Restart functionality (press R) ✅
-- [ ] Menu screens
+- [x] Menu screens✅
+- [x] Pause functionality (press P)✅
+- [x] Game over screen with scores✅
+- [x] High score tracking (saves to file)✅
+- [x] Sound effects (if sound files available)✅
+- [x] Scrolling ground✅
+- [ x] Score flash effect✅
 
 ## License
 MIT License
