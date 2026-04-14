@@ -47,6 +47,47 @@ class ScoreManager:
         """Get current score"""
         return self.score
     
+    def update(self, bird, pipes):
+        """
+        Update score based on bird passing pipes
+        bird: Bird object
+        pipes: List of Pipe objects
+        """
+        bird_x = bird.x + bird.width
+        
+        for pipe in pipes:
+            # Check if bird has passed this pipe
+            pipe_id = id(pipe)
+            
+            if bird_x > pipe.x + pipe.width and pipe_id not in self.passed_pipes:
+                self.score += 1
+                self.passed_pipes.add(pipe_id)
+                self.flash_timer = 10  # Add flash effect
+                print(f"Score: {self.score}")
+    
+    def __init__(self):
+        """Initialize score manager"""
+        self.score = 0
+        self.passed_pipes = set()
+        self.flash_timer = 0  # Add this line
+        
+        pygame.font.init()
+        self.font = pygame.font.Font(None, 72)
+        self.font_color = (255, 255, 255)
+    
+    def draw(self, screen):
+        """Draw the score on screen with flash effect"""
+        # Update flash timer
+        if self.flash_timer > 0:
+            self.flash_timer -= 1
+            color = (255, 255, 0)  # Yellow when flashing
+        else:
+            color = self.font_color  # White normally
+        
+        score_text = self.font.render(str(self.score), True, color)
+        score_rect = score_text.get_rect(center=(screen.get_width() // 2, 50))
+        screen.blit(score_text, score_rect)
+    
 class HighScoreManager:
     """
     Manages high score persistence
