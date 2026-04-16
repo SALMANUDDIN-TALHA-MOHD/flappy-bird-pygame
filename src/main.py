@@ -2,7 +2,6 @@ import pygame
 import sys
 import os
 from bird import Bird
-from bird import Bird
 from pipe import PipeManager
 from collision import CollisionDetector
 from score import ScoreManager, HighScoreManager
@@ -23,19 +22,6 @@ pygame.display.set_caption("Flappy Bird - Team Project")
 # Colors
 SKY_BLUE = (135, 206, 235)
 
-# Load background image
-background_path = os.path.join(os.path.dirname(__file__), '..', 'assets', 'images', 'backgrounds', 'background.jpg')
-try:
-    BACKGROUND = pygame.image.load(background_path).convert()
-    BACKGROUND = pygame.transform.scale(BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT))
-    print("✓ Background loaded")
-except:
-    BACKGROUND = None
-    print("✗ Background not found, using solid color")
-    
-    # Create scrolling background
-    scrolling_bg = ScrollingBackground(SCREEN_WIDTH, SCREEN_HEIGHT)
-
 # Game clock for FPS control
 clock = pygame.time.Clock()
 FPS = 60
@@ -50,7 +36,7 @@ def main():
     high_score_manager = HighScoreManager()
     menu_manager = MenuManager(SCREEN_WIDTH, SCREEN_HEIGHT)
     sound_manager = SoundManager()
-    
+    scrolling_bg = ScrollingBackground(SCREEN_WIDTH, SCREEN_HEIGHT)
     
     # Debug font
     debug_font = pygame.font.Font(None, 36)
@@ -72,43 +58,34 @@ def main():
                         menu_manager.set_state(GameState.PLAYING)
                         # Reset and activate bird
                         bird = Bird(100, SCREEN_HEIGHT // 2)
-                        bird.activate()  # Add this line
+                        bird.activate()
                         pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
                         score_manager.reset()
                         print("Game Started!")
-                        
-                        # Reset game
-                        bird = Bird(100, SCREEN_HEIGHT // 2)
-                        pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
-                        score_manager.reset()
                 
                 # Playing state
                 elif current_state == GameState.PLAYING:
                     if event.key == pygame.K_SPACE:
                         if not bird.active:
-                            bird.activate()  # Activate on first jump
+                            bird.activate()
                         bird.jump()
                         sound_manager.play_jump()
                 
-                # Paused state
-                elif current_state == GameState.PAUSED:
-                    if event.key == pygame.K_p:
-                        menu_manager.set_state(GameState.PLAYING)
-                
                 # Game over state
                 elif current_state == GameState.GAME_OVER:
-                    if event.key == pygame.K_r or event.key == pygame.K_SPACE:  # Allow SPACE too
+                    if event.key == pygame.K_r or event.key == pygame.K_SPACE:
                         menu_manager.set_state(GameState.START)
         
         # Update game (only when playing)
         if menu_manager.get_state() == GameState.PLAYING:
-            scrolling_bg.update() 
+            # Update scrolling background
+            scrolling_bg.update()
+            
             # Update bird physics
             bird.update(SCREEN_HEIGHT)
             
             # Update pipes
             pipe_manager.update()
-            
             
             # Update score
             old_score = score_manager.get_score()
@@ -126,12 +103,7 @@ def main():
                 # Save high score
                 high_score_manager.save_high_score(score_manager.get_score())
         
-        # Draw background
-        if BACKGROUND:
-            screen.blit(BACKGROUND, (0, 0))
-        else:
-            screen.fill(SKY_BLUE)
-            
+        # Draw everything
         # Draw scrolling background
         scrolling_bg.draw(screen)
         
@@ -143,19 +115,18 @@ def main():
         if menu_manager.get_state() == GameState.PLAYING:
             score_manager.draw(screen)
         
-        # Draw debug info
+        # Draw debug info (optional - comment out for clean look)
         pipe_count = len(pipe_manager.get_pipes())
-        debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (0, 0, 0))  # Changed to black
+        debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (0, 0, 0))
         screen.blit(debug_text, (10, 10))
         
         # Draw appropriate menu overlay
         if menu_manager.get_state() == GameState.START:
             menu_manager.draw_start_screen(screen)
-            # Show high score on start screen
-            high_score_text = debug_font.render(f'High Score: {high_score_manager.get_high_score()}', 
-                                               True, (255, 255, 0))
-            high_score_rect = high_score_text.get_rect(center=(SCREEN_WIDTH // 2, 420))
-            screen.blit(high_score_text, high_score_rect)
+        elif menu_manager.get_state() == GameState.GAME_OVER:
+            menu_manager.draw_game_over_screen(screen, 
+                                               score_manager.get_score(),
+                                               high_score_manager.get_high_score())
         
         # Update display
         pygame.display.flip()
