@@ -111,28 +111,31 @@ class MenuManager:
         """Get current game state"""
         return self.state
     
-    def draw_start_screen(self, screen):
-        """Draw the start menu with high score"""
-        # Semi-transparent overlay
-        overlay = pygame.Surface((self.screen_width, self.screen_height))
-        overlay.set_alpha(180)
-        overlay.fill(self.black)
-        screen.blit(overlay, (0, 0))
+def draw_start_screen(self, screen):
+        """Draw professional start screen"""
+        # No overlay - show game in background
         
-        # Title
-        title_text = self.title_font.render('FLAPPY BIRD', True, self.yellow)
-        title_rect = title_text.get_rect(center=(self.screen_width // 2, 150))
+        # Title with retro pixel font style
+        title_text = self.title_font.render('FLAPPY BIRD', True, (255, 215, 0))  # Gold color
+        title_rect = title_text.get_rect(center=(self.screen_width // 2, 120))
+        
+        # Add shadow for title
+        shadow = self.title_font.render('FLAPPY BIRD', True, (0, 0, 0))
+        shadow_rect = shadow.get_rect(center=(self.screen_width // 2 + 3, 123))
+        screen.blit(shadow, shadow_rect)
         screen.blit(title_text, title_rect)
         
-        # Instructions
-        instruction1 = self.medium_font.render('Press SPACE to Start', True, self.white)
-        instruction1_rect = instruction1.get_rect(center=(self.screen_width // 2, 260))
-        screen.blit(instruction1, instruction1_rect)
+        # Get Ready text
+        ready_text = self.medium_font.render('GET READY', True, (255, 140, 0))  # Orange
+        ready_rect = ready_text.get_rect(center=(self.screen_width // 2, 220))
+        screen.blit(ready_text, ready_rect)
         
-        instruction2 = self.small_font.render('SPACE to Flap | P to Pause', True, self.white)
-        instruction2_rect = instruction2.get_rect(center=(self.screen_width // 2, 320))
-        screen.blit(instruction2, instruction2_rect)
+        # Tap instruction with hand icon style
+        tap_text = self.large_font.render('TAP', True, (255, 69, 0))  # Red-orange
+        tap_rect = tap_text.get_rect(center=(self.screen_width // 2, 300))
+        screen.blit(tap_text, tap_rect)
         
-        instruction3 = self.small_font.render('Avoid the Pipes!', True, self.white)
-        instruction3_rect = instruction3.get_rect(center=(self.screen_width // 2, 370))
-        screen.blit(instruction3, instruction3_rect)
+        # Instruction
+        inst_text = self.small_font.render('Press SPACE to Start', True, self.white)
+        inst_rect = inst_text.get_rect(center=(self.screen_width // 2, 370))
+        screen.blit(inst_text, inst_rect)
