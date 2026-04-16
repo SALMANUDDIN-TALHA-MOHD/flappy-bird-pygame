@@ -70,8 +70,9 @@ def main():
                 if current_state == GameState.START:
                     if event.key == pygame.K_SPACE:
                         menu_manager.set_state(GameState.PLAYING)
-                        # Reset game
+                        # Reset and activate bird
                         bird = Bird(100, SCREEN_HEIGHT // 2)
+                        bird.activate()  # Add this line
                         pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
                         score_manager.reset()
                         print("Game Started!")
@@ -84,10 +85,10 @@ def main():
                 # Playing state
                 elif current_state == GameState.PLAYING:
                     if event.key == pygame.K_SPACE:
+                        if not bird.active:
+                            bird.activate()  # Activate on first jump
                         bird.jump()
                         sound_manager.play_jump()
-                    if event.key == pygame.K_p:
-                        menu_manager.set_state(GameState.PAUSED)
                 
                 # Paused state
                 elif current_state == GameState.PAUSED:
@@ -96,7 +97,7 @@ def main():
                 
                 # Game over state
                 elif current_state == GameState.GAME_OVER:
-                    if event.key == pygame.K_r:
+                    if event.key == pygame.K_r or event.key == pygame.K_SPACE:  # Allow SPACE too
                         menu_manager.set_state(GameState.START)
         
         # Update game (only when playing)
