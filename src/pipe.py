@@ -35,13 +35,15 @@ class Pipe:
         
     @classmethod
     def _load_sprite(cls):
-        """Load pipe sprite (class method - called once)"""
+        """Load pipe sprite once (optimized)"""
         pipe_path = os.path.join(os.path.dirname(__file__), '..', 'assets', 'images', 'pipes', 'pipe.png')
         
         try:
-            cls._pipe_sprite = pygame.image.load(pipe_path).convert_alpha()
+            original = pygame.image.load(pipe_path).convert_alpha()
+            # Pre-scale to common size
+            cls._pipe_sprite = pygame.transform.smoothscale(original, (52, 320))
             cls._sprite_loaded = True
-            print("✓ Pipe sprite loaded successfully")
+            print("✓ Pipe sprite optimized and loaded")
         except Exception as e:
             print(f"✗ Could not load pipe sprite: {e}")
             cls._pipe_sprite = None
