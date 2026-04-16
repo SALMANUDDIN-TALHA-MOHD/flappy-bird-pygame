@@ -50,21 +50,23 @@ class ScoreManager:
     def update(self, bird, pipes):
         """
         Update score based on bird passing pipes
-        bird: Bird object
-        pipes: List of Pipe objects
         """
-        bird_x = bird.x + bird.width
+        if not bird.active:
+            return  # Don't count if bird hasn't started
+            
+        bird_center_x = bird.x + bird.width // 2
         
         for pipe in pipes:
-            # Check if bird has passed this pipe
             pipe_id = id(pipe)
+            pipe_center_x = pipe.x + pipe.width // 2
             
-            if bird_x > pipe.x + pipe.width and pipe_id not in self.passed_pipes:
+            # Check if bird's center has just passed pipe's center
+            if bird_center_x > pipe_center_x and pipe_id not in self.passed_pipes:
                 self.score += 1
                 self.passed_pipes.add(pipe_id)
-                self.flash_timer = 10  # Add flash effect
+                self.flash_timer = 10
                 print(f"Score: {self.score}")
-    
+                return  # Only score one pipe per update
     def __init__(self):
         """Initialize score manager"""
         self.score = 0
