@@ -1,5 +1,7 @@
 import pygame
 import sys
+import os
+from bird import Bird
 from bird import Bird
 from pipe import PipeManager
 from collision import CollisionDetector
@@ -20,6 +22,16 @@ pygame.display.set_caption("Flappy Bird - Team Project")
 
 # Colors
 SKY_BLUE = (135, 206, 235)
+
+# Load background image
+background_path = os.path.join(os.path.dirname(__file__), '..', 'assets', 'images', 'backgrounds', 'background.jpg')
+try:
+    BACKGROUND = pygame.image.load(background_path).convert()
+    BACKGROUND = pygame.transform.scale(BACKGROUND, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    print("✓ Background loaded")
+except:
+    BACKGROUND = None
+    print("✗ Background not found, using solid color")
 
 # Game clock for FPS control
 clock = pygame.time.Clock()
@@ -113,8 +125,11 @@ def main():
                 # Save high score
                 high_score_manager.save_high_score(score_manager.get_score())
         
-        # Draw everything
-        screen.fill(SKY_BLUE)
+        # Draw background
+        if BACKGROUND:
+            screen.blit(BACKGROUND, (0, 0))
+        else:
+            screen.fill(SKY_BLUE)
         
         # Draw game elements
         pipe_manager.draw(screen)
