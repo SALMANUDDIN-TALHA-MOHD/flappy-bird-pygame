@@ -136,7 +136,7 @@ def main():
         
         # Draw debug info
         pipe_count = len(pipe_manager.get_pipes())
-        debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (255, 255, 255))
+        debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (0, 0, 0))  # Changed to black
         screen.blit(debug_text, (10, 10))
         
         # Draw appropriate menu overlay
