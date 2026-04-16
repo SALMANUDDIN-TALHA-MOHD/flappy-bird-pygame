@@ -11,6 +11,9 @@ class Bird:
         self.y = y
         self.velocity = 0
         
+        # Game state
+        self.active = False  # Bird doesn't fall until game starts
+        
         # Physics constants
         self.gravity = 0.35
         self.max_fall_speed = 8
@@ -61,32 +64,38 @@ class Bird:
         
     def update(self, screen_height):
         """Update bird physics and animation"""
-        # Apply gravity
-        self.velocity += self.gravity
+        # Only apply physics if bird is active
+        if self.active:
+            # Apply gravity
+            self.velocity += self.gravity
+            
+            # Limit fall speed
+            if self.velocity > self.max_fall_speed:
+                self.velocity = self.max_fall_speed
+            
+            # Update position
+            self.y += self.velocity
+            
+            # Update rotation based on velocity
+            self.rotation = -self.velocity * 3
+            if self.rotation > 20:
+                self.rotation = 20
+            if self.rotation < -90:
+                self.rotation = -90
+            
+            # Keep bird within screen boundaries
+            if self.y < 0:
+                self.y = 0
+                self.velocity = 0
+            if self.y > screen_height - self.height:
+                self.y = screen_height - self.height
+                self.velocity = 0
+        else:
+            # Gentle hover animation when inactive
+            import math
+            self.y = screen_height // 2 + math.sin(pygame.time.get_ticks() / 200) * 10
         
-        # Limit fall speed
-        if self.velocity > self.max_fall_speed:
-            self.velocity = self.max_fall_speed
-        
-        # Update position
-        self.y += self.velocity
-        
-        # Update rotation based on velocity
-        self.rotation = -self.velocity * 3
-        if self.rotation > 20:
-            self.rotation = 20
-        if self.rotation < -90:
-            self.rotation = -90
-        
-        # Keep bird within screen boundaries
-        if self.y < 0:
-            self.y = 0
-            self.velocity = 0
-        if self.y > screen_height - self.height:
-            self.y = screen_height - self.height
-            self.velocity = 0
-        
-        # Update animation
+        # Update animation regardless of active state
         self.animation_time += 1
         if self.animation_time >= self.animation_speed:
             self.animation_time = 0
@@ -112,3 +121,12 @@ class Bird:
     def get_rect(self):
         """Get collision rectangle for the bird"""
         return pygame.Rect(self.x, self.y, self.width, self.height)
+    
+    def activate(self):
+        """Activate bird (start physics)"""
+        self.active = True
+    
+    def deactivate(self):
+        """Deactivate bird (hover mode)"""
+        self.active = False
+        self.velocity = 0
