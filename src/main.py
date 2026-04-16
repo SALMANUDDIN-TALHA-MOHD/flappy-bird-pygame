@@ -8,6 +8,7 @@ from collision import CollisionDetector
 from score import ScoreManager, HighScoreManager
 from menu import MenuManager, GameState
 from sound import SoundManager
+from background import ScrollingBackground
 
 # Initialize Pygame
 pygame.init()
@@ -31,6 +32,9 @@ try:
 except:
     BACKGROUND = None
     print("✗ Background not found, using solid color")
+    
+    # Create scrolling background
+    scrolling_bg = ScrollingBackground(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # Game clock for FPS control
 clock = pygame.time.Clock()
@@ -97,6 +101,7 @@ def main():
         
         # Update game (only when playing)
         if menu_manager.get_state() == GameState.PLAYING:
+            scrolling_bg.update() 
             # Update bird physics
             bird.update(SCREEN_HEIGHT)
             
@@ -125,6 +130,9 @@ def main():
             screen.blit(BACKGROUND, (0, 0))
         else:
             screen.fill(SKY_BLUE)
+            
+        # Draw scrolling background
+        scrolling_bg.draw(screen)
         
         # Draw game elements
         pipe_manager.draw(screen)
