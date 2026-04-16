@@ -12,9 +12,9 @@ class Bird:
         self.velocity = 0
         
         # Physics constants
-        self.gravity = 0.35
-        self.max_fall_speed = 8
-        self.jump_strength = -8
+        self.gravity = 0.30
+        self.max_fall_speed = 7
+        self.jump_strength = -7
         
         # Bird size
         self.width = 40
