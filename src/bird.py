@@ -17,8 +17,8 @@ class Bird:
         self.jump_strength = -7
         
         # Bird size
-        self.width = 40
-        self.height = 35
+        self.width = 50
+        self.height = 50
         self.rotation = 0
         
         # Game state
