@@ -1,13 +1,10 @@
 import pygame
 
 class ScoreManager:
-    """
-    Manages game scoring system
-    """
+    """Manages game scoring system"""
     def __init__(self):
-        """Initialize score manager"""
         self.score = 0
-        self.passed_pipes = set()
+        self.scored_pipes = set()  # Track pipes that have been scored
         self.flash_timer = 0
         
         pygame.font.init()
@@ -18,19 +15,17 @@ class ScoreManager:
         """Update score based on bird passing pipes"""
         if not bird.active:
             return
-            
-        bird_center_x = bird.x + bird.width // 2
         
         for pipe in pipes:
             pipe_id = id(pipe)
-            pipe_center_x = pipe.x + pipe.width // 2
             
-            if bird_center_x > pipe_center_x and pipe_id not in self.passed_pipes:
+            # Check if bird has COMPLETELY passed this pipe
+            if pipe.is_passed_by_bird(bird) and pipe_id not in self.scored_pipes:
                 self.score += 1
-                self.passed_pipes.add(pipe_id)
+                self.scored_pipes.add(pipe_id)
                 self.flash_timer = 10
                 print(f"Score: {self.score}")
-                return
+                break  # Only score one pipe per update
     
     def draw(self, screen):
         """Draw the score on screen with flash effect"""
@@ -41,13 +36,13 @@ class ScoreManager:
             color = self.font_color
         
         score_text = self.font.render(str(self.score), True, color)
-        score_rect = score_text.get_rect(center=(screen.get_width() // 2, 50))
+        score_rect = score_text.get_rect(center=(screen.get_width() // 2, 80))
         screen.blit(score_text, score_rect)
     
     def reset(self):
         """Reset score to zero"""
         self.score = 0
-        self.passed_pipes.clear()
+        self.scored_pipes.clear()
         self.flash_timer = 0
     
     def get_score(self):
