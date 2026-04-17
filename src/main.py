@@ -14,13 +14,10 @@ pygame.init()
 pygame.font.init()
 
 # Game window settings
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 500
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Flappy Bird - Team Project")
-
-# Colors
-SKY_BLUE = (135, 206, 235)
 
 # Game clock for FPS control
 clock = pygame.time.Clock()
@@ -37,9 +34,6 @@ def main():
     menu_manager = MenuManager(SCREEN_WIDTH, SCREEN_HEIGHT)
     sound_manager = SoundManager()
     scrolling_bg = ScrollingBackground(SCREEN_WIDTH, SCREEN_HEIGHT)
-    
-    # Debug font
-    debug_font = pygame.font.Font(None, 36)
     
     running = True
     
@@ -75,6 +69,10 @@ def main():
                 elif current_state == GameState.GAME_OVER:
                     if event.key == pygame.K_r or event.key == pygame.K_SPACE:
                         menu_manager.set_state(GameState.START)
+                        # Reset everything
+                        bird = Bird(100, SCREEN_HEIGHT // 2)
+                        pipe_manager = PipeManager(SCREEN_WIDTH, SCREEN_HEIGHT)
+                        score_manager.reset()
         
         # Update game (only when playing)
         if menu_manager.get_state() == GameState.PLAYING:
@@ -100,10 +98,9 @@ def main():
             if collision_detector.check_collision(bird, pipe_manager.get_pipes(), SCREEN_HEIGHT):
                 menu_manager.set_state(GameState.GAME_OVER)
                 sound_manager.play_hit()
-                # Save high score
                 high_score_manager.save_high_score(score_manager.get_score())
+                print(f"Game Over! Final Score: {score_manager.get_score()}")
         
-        # Draw everything
         # Draw scrolling background
         scrolling_bg.draw(screen)
         
@@ -114,11 +111,6 @@ def main():
         # Draw score (only when playing)
         if menu_manager.get_state() == GameState.PLAYING:
             score_manager.draw(screen)
-        
-        # Draw debug info (optional - comment out for clean look)
-        pipe_count = len(pipe_manager.get_pipes())
-        debug_text = debug_font.render(f'Pipes: {pipe_count}', True, (0, 0, 0))
-        screen.blit(debug_text, (10, 10))
         
         # Draw appropriate menu overlay
         if menu_manager.get_state() == GameState.START:
