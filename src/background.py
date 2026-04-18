@@ -1,42 +1,45 @@
 import pygame
-import os
+import random
 
-class ScrollingBackground:
-    """Scrolling background with HIGH DEFINITION quality"""
+class Cloud:
+    """Individual cloud"""
+    def __init__(self, x, y, size):
+        self.x = x
+        self.y = y
+        self.size = size
+        self.speed = random.uniform(0.3, 0.8)
+        
+    def update(self, screen_width):
+        self.x -= self.speed
+        if self.x < -100:
+            self.x = screen_width + 50
+            
+    def draw(self, screen):
+        # White fluffy cloud
+        color = (255, 255, 255, 180)
+        surface = pygame.Surface((self.size * 2, self.size), pygame.SRCALPHA)
+        
+        # Draw cloud circles
+        pygame.draw.circle(surface, color, (self.size // 2, self.size // 2), self.size // 2)
+        pygame.draw.circle(surface, color, (self.size, self.size // 2), self.size // 3)
+        pygame.draw.circle(surface, color, (self.size * 1.5, self.size // 2), self.size // 2)
+        
+        screen.blit(surface, (int(self.x), int(self.y)))
+
+
+class Ground:
+    """Scrolling ground"""
     def __init__(self, screen_width, screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
-        
-        bg_path = os.path.join(os.path.dirname(__file__), '..', 'assets', 'images', 'backgrounds', 'background.jpg')
-        
-        try:
-            # Load with HIGHEST quality settings
-            original_bg = pygame.image.load(bg_path).convert()
-            
-            # Use SMOOTHSCALE for maximum quality
-            self.background = pygame.transform.smoothscale(original_bg, (screen_width, screen_height))
-            
-            # Apply additional sharpening if available
-            self.loaded = True
-            print("✓ Ultra HD background loaded")
-        except Exception as e:
-            print(f"✗ Background load error: {e}")
-            # Create nice gradient fallback
-            self.background = pygame.Surface((screen_width, screen_height))
-            for y in range(screen_height):
-                color_value = int(135 + (206 - 135) * (y / screen_height))
-                pygame.draw.line(self.background, (color_value, color_value + 20, 235), 
-                               (0, y), (screen_width, y))
-            self.loaded = True
+        self.height = 112
+        self.y = screen_height - self.height
         
         self.x1 = 0
         self.x2 = screen_width
-        self.speed = 1
+        self.speed = 3
         
     def update(self):
-        if not self.loaded:
-            return
-            
         self.x1 -= self.speed
         self.x2 -= self.speed
         
@@ -46,6 +49,71 @@ class ScrollingBackground:
             self.x2 = self.x1 + self.screen_width
     
     def draw(self, screen):
-        if self.loaded:
-            screen.blit(self.background, (int(self.x1), 0))
-            screen.blit(self.background, (int(self.x2), 0))
+        # Ground color - tan/brown
+        ground_color = (222, 216, 149)
+        grass_color = (125, 186, 66)
+        
+        # Draw ground rectangles
+        pygame.draw.rect(screen, ground_color, (self.x1, self.y, self.screen_width, self.height))
+        pygame.draw.rect(screen, ground_color, (self.x2, self.y, self.screen_width, self.height))
+        
+        # Grass strip
+        pygame.draw.rect(screen, grass_color, (self.x1, self.y, self.screen_width, 15))
+        pygame.draw.rect(screen, grass_color, (self.x2, self.y, self.screen_width, 15))
+
+
+class ScrollingBackground:
+    """Beautiful gradient background with clouds and ground"""
+    def __init__(self, screen_width, screen_height):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        
+        # Create gradient background
+        self.background = pygame.Surface((screen_width, screen_height))
+        self.create_gradient()
+        
+        # Create clouds
+        self.clouds = []
+        for i in range(5):
+            x = random.randint(0, screen_width)
+            y = random.randint(50, 250)
+            size = random.randint(30, 50)
+            self.clouds.append(Cloud(x, y, size))
+        
+        # Create ground
+        self.ground = Ground(screen_width, screen_height)
+        
+        self.loaded = True
+        print("✓ Beautiful gradient background created")
+        
+    def create_gradient(self):
+        """Create sky gradient - light blue to darker blue"""
+        for y in range(self.screen_height):
+            # Gradient from light sky blue to deeper blue
+            progress = y / self.screen_height
+            
+            # Top color: Light sky blue (135, 206, 235)
+            # Bottom color: Deeper blue (70, 130, 180)
+            r = int(135 - (135 - 70) * progress)
+            g = int(206 - (206 - 130) * progress)
+            b = int(235 - (235 - 180) * progress)
+            
+            pygame.draw.line(self.background, (r, g, b), (0, y), (self.screen_width, y))
+        
+    def update(self):
+        """Update clouds and ground"""
+        for cloud in self.clouds:
+            cloud.update(self.screen_width)
+        self.ground.update()
+    
+    def draw(self, screen):
+        """Draw background, clouds, and ground"""
+        # Draw gradient
+        screen.blit(self.background, (0, 0))
+        
+        # Draw clouds
+        for cloud in self.clouds:
+            cloud.draw(screen)
+        
+        # Draw ground
+        self.ground.draw(screen)
