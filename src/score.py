@@ -1,7 +1,7 @@
 import pygame
 
 class ScoreManager:
-    """Manages game scoring - FIXED VERSION"""
+    """Manages game scoring"""
     def __init__(self):
         self.score = 0
         self.flash_timer = 0
@@ -11,7 +11,7 @@ class ScoreManager:
         self.font_color = (255, 255, 255)
     
     def update(self, bird, pipes):
-        """Update score - COMPLETELY FIXED"""
+        """Update score"""
         if not bird.active:
             return
         
