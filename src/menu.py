@@ -20,11 +20,13 @@ class MenuManager:
         self.large_font = pygame.font.Font(None, 56)
         self.medium_font = pygame.font.Font(None, 42)
         self.small_font = pygame.font.Font(None, 32)
+        self.tiny_font = pygame.font.Font(None, 24)
         
         self.white = (255, 255, 255)
         self.black = (0, 0, 0)
         self.red = (255, 0, 0)
         self.yellow = (255, 255, 0)
+        self.green = (50, 200, 50)
         
     def draw_start_screen(self, screen):
         """Draw professional start screen"""
@@ -61,7 +63,7 @@ class MenuManager:
         screen.blit(inst3, inst3_rect)
         
     def draw_game_over_screen(self, screen, score, high_score):
-        """Draw professional game over screen"""
+        """Draw professional game over screen with team credits"""
         panel_width = 350
         panel_height = 180
         panel_x = (self.screen_width - panel_width) // 2
@@ -108,7 +110,7 @@ class MenuManager:
         
         # Play button
         play_button_rect = pygame.Rect(self.screen_width // 2 - 160, button_y, 130, 45)
-        pygame.draw.rect(screen, (50, 200, 50), play_button_rect)
+        pygame.draw.rect(screen, self.green, play_button_rect)
         pygame.draw.rect(screen, (0, 0, 0), play_button_rect, 3)
         
         play_text = self.medium_font.render('PLAY', True, self.white)
@@ -117,17 +119,36 @@ class MenuManager:
         
         # Share button
         share_button_rect = pygame.Rect(self.screen_width // 2 + 30, button_y, 130, 45)
-        pygame.draw.rect(screen, (50, 200, 50), share_button_rect)
+        pygame.draw.rect(screen, self.green, share_button_rect)
         pygame.draw.rect(screen, (0, 0, 0), share_button_rect, 3)
         
         share_text = self.medium_font.render('SHARE', True, self.white)
         share_text_rect = share_text.get_rect(center=share_button_rect.center)
         screen.blit(share_text, share_text_rect)
         
+        # TEAM CREDITS - "Built by SALMAN, AMAAN, SOHAIL"
+        credit_text = self.tiny_font.render('Built by SALMAN, AMAAN, SOHAIL', True, (20, 20, 20))
+        credit_rect = credit_text.get_rect(center=(self.screen_width // 2, self.screen_height - 50))
+        screen.blit(credit_text, credit_rect)
+        
         # Instruction
         restart_text = self.small_font.render('Press R or SPACE to Play Again', True, self.white)
         restart_rect = restart_text.get_rect(center=(self.screen_width // 2, button_y + 75))
         screen.blit(restart_text, restart_rect)
+
+        
+        # Store button rectangles for click detection
+        self.play_button_rect = play_button_rect
+        self.share_button_rect = share_button_rect
+        
+    def check_button_click(self, mouse_pos):
+        """Check if a button was clicked - returns 'play', 'share', or None"""
+        if self.state == GameState.GAME_OVER:
+            if hasattr(self, 'play_button_rect') and self.play_button_rect.collidepoint(mouse_pos):
+                return 'play'
+            if hasattr(self, 'share_button_rect') and self.share_button_rect.collidepoint(mouse_pos):
+                return 'share'
+        return None
         
     def set_state(self, new_state):
         self.state = new_state
