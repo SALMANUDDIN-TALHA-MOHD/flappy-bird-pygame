@@ -31,13 +31,18 @@ class MenuManager:
     def draw_start_screen(self, screen):
         """Draw professional start screen"""
         # Title
-        title_text = self.title_font.render('FLAPPY BIRD', True, (255, 215, 0))
+        title_text = self.title_font.render('FLAPPY BIRD GAME', True, (255, 215, 0))
         title_rect = title_text.get_rect(center=(self.screen_width // 2, 150))
         
-        shadow = self.title_font.render('FLAPPY BIRD', True, (0, 0, 0))
+        shadow = self.title_font.render('FLAPPY BIRD GAME', True, (0, 0, 0))
         shadow_rect = shadow.get_rect(center=(self.screen_width // 2 + 2, 152))
         screen.blit(shadow, shadow_rect)
         screen.blit(title_text, title_rect)
+        
+        # TEAM CREDITS - "Built by SALMAN, AMAAN, SOHAIL"
+        credit_text = self.tiny_font.render('Built by SALMAN, AMAAN, SOHAIL', True, (20, 20, 20))
+        credit_rect = credit_text.get_rect(center=(self.screen_width // 2, self.screen_height - 50))
+        screen.blit(credit_text, credit_rect)
         
         # Get Ready
         ready_text = self.large_font.render('GET READY', True, (255, 140, 0))
