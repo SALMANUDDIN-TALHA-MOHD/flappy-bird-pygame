@@ -1,6 +1,11 @@
 # Flappy Bird - Pygame Project
 
-Open Source Computing Course Project COMP 312/412 - Spring 2026
+A complete Flappy Bird implementation built from scratch using Python and Pygame as an open-source learning project.
+
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+![Pygame](https://img.shields.io/badge/Pygame-2.5.2-green.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 
 ## Team Members
 - Salmanuddin Talha Mohd (Graduate Student)
@@ -9,6 +14,32 @@ Open Source Computing Course Project COMP 312/412 - Spring 2026
 
 ## Description
 A Flappy Bird-style game built with Python and Pygame. This project implements core game mechanics including physics, collision detection, scoring, and menu systems.
+
+## 📖 Mission Statement
+
+**We created this open-source Flappy Bird game to demonstrate game development fundamentals and serve as an educational resource for students learning Python and Pygame.**
+
+Our goals:
+- Build a complete, playable game from scratch
+- Practice collaborative software development using Git/GitHub
+- Create clean, well-documented code that others can learn from
+- Contribute to the open-source community
+
+We believe knowledge grows when shared. This project demonstrates core game development concepts including physics simulation, collision detection, procedural generation, and state management - all applicable to any game project.
+
+---
+
+## ✨ Features
+
+- **60 FPS Gameplay** - Smooth, consistent performance
+- **Realistic Physics** - Gravity-based movement with acceleration
+- **Smart Collision Detection** - Forgiving hitboxes for fair gameplay  
+- **Procedural Generation** - Randomized pipe obstacles
+- **Score Tracking** - Real-time scoring with persistent high scores
+- **Professional UI** - Polished menus and game over screen
+- **Sound Effects** - 5 audio effects (wing, score, hit, fall, game over)
+- **Beautiful Graphics** - Gradient sky, animated clouds, scrolling ground
+- **Cross-Platform** - Works on macOS, Windows, and Linux
 
 ## Installation
 
@@ -85,7 +116,11 @@ python3 main.py
 - [x] High score tracking (saves to file)✅
 - [x] Sound effects (if sound files available)✅
 - [x] Scrolling ground✅
-- [ x] Score flash effect✅
+- [x] Score flash effect✅
+
+### Controls
+- **SPACE** - Jump/Flap, Start game, Restart
+- **R** - Restart after game over
 
 ## License
 MIT License
