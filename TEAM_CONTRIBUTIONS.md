@@ -16,7 +16,6 @@ This document details who worked on what for the Flappy Bird game project.
 ## Salmanuddin Talha Mohd - Lead Developer
 
 **Role:** Graduate Student  
-**Contribution:** ~85% of codebase
 
 ### Code Written:
 - `main.py` - Complete game loop, state management
@@ -42,7 +41,6 @@ This document details who worked on what for the Flappy Bird game project.
 - Git workflow management
 - Integration of all components
 
-**Time:** ~60 hours
 
 ---
 
@@ -54,12 +52,7 @@ This document details who worked on what for the Flappy Bird game project.
 ### Assets Sourced:
 - Bird animation sprites (8 frames)
 - Pipe graphics
-- 5 sound effects:
-  - `wing.wav` - Wing flap
-  - `point.wav` - Score sound
-  - `hit.wav` - Collision
-  - `fall.wav` - Falling
-  - `gameover.wav` - Game over
+- sound effects:
 
 ### Technical Work:
 - Sprite integration into Pygame
@@ -73,7 +66,10 @@ This document details who worked on what for the Flappy Bird game project.
 - Sound system testing
 - Visual quality assurance
 
-**Time:** ~40 hours
+### Critical Bug Discovery:
+3. **Memory Leak** - Found performance degradation
+4. **Sound Issues** - Discovered Windows incompatibility
+
 
 ---
 
@@ -102,11 +98,10 @@ This document details who worked on what for the Flappy Bird game project.
 
 ### Documentation:
 - TESTING.md
-- Progress reports (1-8)
+- Progress weekly reports by helping Project Lead
 - Testing sections of final report
 - Bug tracking and reporting
 
-**Time:** ~45 hours
 
 ---
 
@@ -148,7 +143,7 @@ This document details who worked on what for the Flappy Bird game project.
 | Sounds | Amaan (assets) | Salmanuddin |
 | Sprites | Amaan (assets) | Salmanuddin |
 | Testing | Sohail | All |
-| Documentation | All |
+| Documentation | All | All |
 
 ---
 
